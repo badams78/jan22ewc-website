@@ -1,16 +1,46 @@
+/**
+ * MacroRoundup Taxonomy Visualizations v2
+ * 
+ * Provides interactive visualizations for subcluster pages:
+ * - Similarity Heatmap Row
+ * - Spider/Radar Chart
+ * - 2D Embedding Map
+ * - Interactive Network Graph
+ */
 
-// Visualization utilities
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
 const VizUtils = {
-    // Color interpolation for heatmap
+    /**
+     * Get color for heatmap based on similarity value
+     * Blue (low) -> White (mid) -> Red (high)
+     */
     getHeatmapColor(value) {
-        // Blue (low) -> White (mid) -> Red (high)
-        const r = value > 0.5 ? 255 : Math.round(255 * value * 2);
-        const b = value < 0.5 ? 255 : Math.round(255 * (1 - value) * 2);
-        const g = value < 0.5 ? Math.round(255 * value * 2) : Math.round(255 * (1 - value) * 2);
-        return `rgb(${r}, ${g}, ${b})`;
+        // Clamp value to 0-1
+        value = Math.max(0, Math.min(1, value));
+        
+        if (value < 0.5) {
+            // Blue to white (0 to 0.5)
+            const intensity = value * 2;
+            const r = Math.round(255 * intensity);
+            const g = Math.round(255 * intensity);
+            const b = 255;
+            return `rgb(${r}, ${g}, ${b})`;
+        } else {
+            // White to red (0.5 to 1)
+            const intensity = (value - 0.5) * 2;
+            const r = 255;
+            const g = Math.round(255 * (1 - intensity));
+            const b = Math.round(255 * (1 - intensity));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
     },
 
-    // Tooltip management
+    /**
+     * Show tooltip at mouse position
+     */
     showTooltip(event, content) {
         let tooltip = document.getElementById('viz-tooltip');
         if (!tooltip) {
@@ -21,242 +51,457 @@ const VizUtils = {
         }
         tooltip.innerHTML = content;
         tooltip.style.display = 'block';
-        tooltip.style.left = (event.clientX + 15) + 'px';
-        tooltip.style.top = (event.clientY + 15) + 'px';
+        
+        // Position with bounds checking
+        const x = Math.min(event.clientX + 15, window.innerWidth - 260);
+        const y = Math.min(event.clientY + 15, window.innerHeight - 100);
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
     },
 
+    /**
+     * Hide tooltip
+     */
     hideTooltip() {
         const tooltip = document.getElementById('viz-tooltip');
         if (tooltip) tooltip.style.display = 'none';
     },
 
-    // Slugify for URLs
+    /**
+     * Convert text to URL-safe slug
+     */
     slugify(text) {
+        if (!text) return '';
         return text.toLowerCase()
-            .replace(/[^\w\s-]/g, '')
+            .replace(/[^a-z0-9\s-]/g, '')
             .replace(/[\s_]+/g, '-')
+            .replace(/-+/g, '-')
             .substring(0, 50);
+    },
+
+    /**
+     * Display error message in container
+     */
+    showError(containerId, message) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div style="color: #c00; padding: 20px; text-align: center;">
+                <strong>Visualization Error</strong><br>
+                <span style="font-size: 0.9em;">${message}</span>
+            </div>`;
+        }
+    },
+
+    /**
+     * Display loading state in container
+     */
+    showLoading(containerId) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div style="color: #666; padding: 20px; text-align: center;">
+                Loading visualization...
+            </div>`;
+        }
     }
 };
 
-// Heatmap Row Visualization
-function renderHeatmap(containerId, data, currentId, colors, metadata) {
+// =============================================================================
+// SIMILARITY HEATMAP
+// =============================================================================
+
+/**
+ * Render the similarity heatmap row
+ * Shows similarity to all 70 subclusters as colored cells
+ */
+function renderHeatmap(containerId, similarityData, currentId, colors, metadata) {
     const container = document.getElementById(containerId);
-    if (!container || !data) return;
+    if (!container) {
+        console.error('Heatmap container not found:', containerId);
+        return;
+    }
+    
+    if (!similarityData || !similarityData.subclusters || !similarityData.matrix) {
+        VizUtils.showError(containerId, 'Similarity data not available');
+        return;
+    }
 
-    // Find current index
-    const currentIdx = data.subclusters.indexOf(currentId);
-    if (currentIdx === -1) return;
+    // Find current subcluster index
+    const currentIdx = similarityData.subclusters.indexOf(currentId);
+    if (currentIdx === -1) {
+        VizUtils.showError(containerId, `Subcluster ${currentId} not found in similarity matrix`);
+        return;
+    }
 
-    const simRow = data.matrix[currentIdx];
+    const simRow = similarityData.matrix[currentIdx];
 
     // Build heatmap HTML
     let html = '<div class="heatmap-row">';
     
-    // Group by primary
-    let currentPrimary = null;
-    metadata.primaries.forEach((primary, pIdx) => {
-        primary.subclusters.forEach((sub, sIdx) => {
-            const idx = data.subclusters.indexOf(sub.id);
+    metadata.primaries.forEach((primary) => {
+        primary.subclusters.forEach((sub) => {
+            const idx = similarityData.subclusters.indexOf(sub.id);
+            if (idx === -1) return;
+            
             const sim = simRow[idx];
             const color = VizUtils.getHeatmapColor(sim);
             const isCurrent = sub.id === currentId;
+            const borderStyle = isCurrent ? 'border: 2px solid #333;' : '';
+            
+            // Escape quotes in names for HTML attributes
+            const safeName = sub.name.replace(/"/g, '&quot;');
+            const safePrimary = primary.name.replace(/"/g, '&quot;');
             
             html += `<div class="heatmap-cell" 
-                style="background: ${color}; ${isCurrent ? 'border: 2px solid #333;' : ''}"
+                style="background: ${color}; ${borderStyle}"
                 data-id="${sub.id}"
-                data-name="${sub.name}"
-                data-primary="${primary.name}"
+                data-name="${safeName}"
+                data-primary="${safePrimary}"
                 data-sim="${sim.toFixed(3)}"
-                onclick="navigateToSubcluster('${sub.id}', '${primary.name}')"
-                onmouseover="VizUtils.showTooltip(event, '<div class=tooltip-title>${sub.name}</div><div class=tooltip-value>${primary.name}<br>Similarity: ${sim.toFixed(3)}</div>')"
-                onmouseout="VizUtils.hideTooltip()"></div>`;
+                onclick="navigateToSubcluster('${sub.id}', '${safePrimary}')"
+                onmouseenter="showHeatmapTooltip(event, '${safeName}', '${safePrimary}', ${sim.toFixed(4)})"
+                onmouseleave="VizUtils.hideTooltip()"></div>`;
         });
     });
     
     html += '</div>';
     
-    // Primary labels
+    // Primary cluster labels
     html += '<div class="heatmap-primary-labels">';
     metadata.primaries.forEach(primary => {
-        const width = (primary.subclusters.length / 70 * 100).toFixed(1);
-        html += `<div class="heatmap-primary-label" style="width: ${width}%; color: ${primary.color}">${primary.name.substring(0, 15)}</div>`;
+        const width = (primary.subclusters.length / metadata.total_subclusters * 100).toFixed(1);
+        html += `<div class="heatmap-primary-label" style="width: ${width}%; color: ${primary.color}">
+            ${primary.name.substring(0, 12)}
+        </div>`;
     });
     html += '</div>';
     
-    html += '<div class="heatmap-legend"><span>Low similarity (0.0)</span><span>High similarity (1.0)</span></div>';
+    // Legend
+    html += `<div class="heatmap-legend">
+        <span style="color: #00f;">Low (0.0)</span>
+        <span style="color: #888;">Medium (0.5)</span>
+        <span style="color: #f00;">High (1.0)</span>
+    </div>`;
     
     container.innerHTML = html;
 }
 
-// Spider/Radar Chart using Canvas
-function renderSpiderChart(containerId, spiderData, colors) {
-    const container = document.getElementById(containerId);
-    if (!container || !spiderData) return;
+/**
+ * Show tooltip for heatmap cell
+ */
+function showHeatmapTooltip(event, name, primary, similarity) {
+    VizUtils.showTooltip(event, `
+        <div class="tooltip-title">${name}</div>
+        <div class="tooltip-value">
+            ${primary}<br>
+            Similarity: ${similarity.toFixed(3)}
+        </div>
+    `);
+}
 
+// =============================================================================
+// SPIDER/RADAR CHART
+// =============================================================================
+
+/**
+ * Render spider/radar chart showing relationship to primary clusters
+ */
+function renderSpiderChart(containerId, subclusterData, colors) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error('Spider container not found:', containerId);
+        return;
+    }
+    
+    // The spider data is in subclusterData.spider
+    const spiderSimilarities = subclusterData.spider;
+    if (!spiderSimilarities || Object.keys(spiderSimilarities).length === 0) {
+        VizUtils.showError(containerId, 'Spider chart data not available');
+        return;
+    }
+
+    // Create canvas
     const canvas = document.createElement('canvas');
-    canvas.width = 400;
-    canvas.height = 400;
+    canvas.width = 500;
+    canvas.height = 500;
     canvas.className = 'spider-chart';
     container.innerHTML = '';
     container.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
-    const centerX = 200;
-    const centerY = 200;
-    const radius = 150;
+    const centerX = 250;
+    const centerY = 250;
+    const radius = 180;
 
-    const primaries = Object.keys(spiderData.similarities);
+    const primaries = Object.keys(spiderSimilarities);
     const numAxes = primaries.length;
+    
+    if (numAxes === 0) {
+        VizUtils.showError(containerId, 'No primary cluster data available');
+        return;
+    }
+    
     const angleStep = (2 * Math.PI) / numAxes;
 
-    // Draw background circles
+    // Clear canvas
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw background circles (grid)
     ctx.strokeStyle = '#ddd';
     ctx.lineWidth = 1;
     for (let r = 0.2; r <= 1; r += 0.2) {
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius * r, 0, 2 * Math.PI);
         ctx.stroke();
+        
+        // Add value label
+        ctx.fillStyle = '#aaa';
+        ctx.font = '10px sans-serif';
+        ctx.fillText(r.toFixed(1), centerX + 5, centerY - radius * r + 3);
     }
 
     // Draw axes and labels
-    ctx.fillStyle = '#666';
-    ctx.font = '10px sans-serif';
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     
     primaries.forEach((name, i) => {
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius;
         
+        // Draw axis line
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.lineTo(x, y);
         ctx.strokeStyle = '#ccc';
+        ctx.lineWidth = 1;
         ctx.stroke();
         
-        // Label
-        const labelX = centerX + Math.cos(angle) * (radius + 20);
-        const labelY = centerY + Math.sin(angle) * (radius + 20);
-        ctx.fillText(name.substring(0, 12), labelX, labelY);
+        // Draw label
+        const labelRadius = radius + 35;
+        const labelX = centerX + Math.cos(angle) * labelRadius;
+        const labelY = centerY + Math.sin(angle) * labelRadius;
+        
+        ctx.fillStyle = '#444';
+        ctx.font = '9px sans-serif';
+        
+        // Truncate long names
+        const displayName = name.length > 15 ? name.substring(0, 14) + '...' : name;
+        ctx.fillText(displayName, labelX, labelY);
     });
 
     // Draw data polygon
     ctx.beginPath();
     primaries.forEach((name, i) => {
-        const value = spiderData.similarities[name];
+        const value = spiderSimilarities[name] || 0;
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius * value;
         const y = centerY + Math.sin(angle) * radius * value;
         
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (i === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
     });
     ctx.closePath();
-    ctx.fillStyle = 'rgba(52, 152, 219, 0.3)';
+    ctx.fillStyle = 'rgba(52, 152, 219, 0.35)';
     ctx.fill();
     ctx.strokeStyle = '#3498db';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.stroke();
 
     // Draw data points
     primaries.forEach((name, i) => {
-        const value = spiderData.similarities[name];
+        const value = spiderSimilarities[name] || 0;
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius * value;
         const y = centerY + Math.sin(angle) * radius * value;
         
         ctx.beginPath();
-        ctx.arc(x, y, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#3498db';
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#2980b9';
         ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
     });
+
+    // Add title
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Average Similarity to Primary Clusters', centerX, 30);
 }
 
-// 2D Embedding Map
+// =============================================================================
+// 2D EMBEDDING MAP
+// =============================================================================
+
+/**
+ * Render 2D t-SNE embedding map
+ */
 function renderEmbeddingMap(containerId, coords, currentId, colors) {
     const container = document.getElementById(containerId);
-    if (!container || !coords) return;
+    if (!container) {
+        console.error('Embedding map container not found:', containerId);
+        return;
+    }
+    
+    if (!coords || coords.length === 0) {
+        VizUtils.showError(containerId, 'Coordinate data not available');
+        return;
+    }
 
     let html = '';
     
     // Create legend
-    const primariesSeen = new Set();
-    html += '<div class="map-legend">';
+    const primariesSeen = new Map();
     coords.forEach(point => {
         if (!primariesSeen.has(point.primary_name)) {
-            primariesSeen.add(point.primary_name);
-            const color = colors.by_name[point.primary_name] || '#999';
-            html += `<div class="map-legend-item"><div class="map-legend-color" style="background: ${color}"></div>${point.primary_name.substring(0, 20)}</div>`;
+            const color = (colors && colors.by_name && colors.by_name[point.primary_name]) || '#999';
+            primariesSeen.set(point.primary_name, color);
         }
+    });
+    
+    html += '<div class="map-legend">';
+    primariesSeen.forEach((color, name) => {
+        html += `<div class="map-legend-item">
+            <div class="map-legend-color" style="background: ${color}"></div>
+            <span>${name.substring(0, 18)}</span>
+        </div>`;
     });
     html += '</div>';
     
     // Create points
     coords.forEach(point => {
-        const color = colors.by_name[point.primary_name] || '#999';
+        const color = (colors && colors.by_name && colors.by_name[point.primary_name]) || '#999';
         const isCurrent = point.id === currentId;
-        html += `<div class="map-point ${isCurrent ? 'current' : ''}" 
-            style="left: ${point.x}%; top: ${point.y}%; background: ${color};"
-            onclick="navigateToSubcluster('${point.id}', '${point.primary_name}')"
-            onmouseover="VizUtils.showTooltip(event, '<div class=tooltip-title>${point.name}</div><div class=tooltip-value>${point.primary_name}<br>${point.article_count} articles</div>')"
-            onmouseout="VizUtils.hideTooltip()"></div>`;
+        const className = isCurrent ? 'map-point current' : 'map-point';
+        
+        // Add some padding to keep points from edge
+        const x = 5 + point.x * 0.9;
+        const y = 5 + point.y * 0.9;
+        
+        const safeName = point.name.replace(/'/g, "\\'");
+        const safePrimary = point.primary_name.replace(/'/g, "\\'");
+        
+        html += `<div class="${className}" 
+            style="left: ${x}%; top: ${y}%; background: ${color};"
+            onclick="navigateToSubcluster('${point.id}', '${safePrimary}')"
+            onmouseenter="showMapTooltip(event, '${safeName}', '${safePrimary}', ${point.article_count})"
+            onmouseleave="VizUtils.hideTooltip()">
+        </div>`;
     });
     
     container.innerHTML = html;
 }
 
-// Network Graph using D3-force (simplified version without D3)
-function renderNetworkGraph(containerId, subclusterData, allCoords, colors, threshold = 0.3) {
-    const container = document.getElementById(containerId);
-    if (!container || !subclusterData) return;
+/**
+ * Show tooltip for map point
+ */
+function showMapTooltip(event, name, primary, articleCount) {
+    VizUtils.showTooltip(event, `
+        <div class="tooltip-title">${name}</div>
+        <div class="tooltip-value">
+            ${primary}<br>
+            ${articleCount} articles
+        </div>
+    `);
+}
 
-    const width = container.clientWidth || 800;
-    const height = 600;
+// =============================================================================
+// NETWORK GRAPH
+// =============================================================================
+
+/**
+ * Render interactive network graph
+ */
+function renderNetworkGraph(containerId, subclusterData, coords, colors, threshold) {
+    threshold = threshold || 0.3;
+    
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error('Network graph container not found:', containerId);
+        return;
+    }
+    
+    if (!subclusterData || !subclusterData.related) {
+        VizUtils.showError(containerId, 'Network data not available');
+        return;
+    }
+
+    const width = container.clientWidth || 700;
+    const height = 550;
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // Filter to connections above threshold
-    const connections = subclusterData.related.filter(r => r.similarity >= threshold).slice(0, 30);
+    // Filter connections above threshold
+    const connections = subclusterData.related
+        .filter(r => r.similarity >= threshold)
+        .slice(0, 25);
     
-    // Position nodes in a circle around center
-    const angleStep = (2 * Math.PI) / connections.length;
-    const radius = Math.min(width, height) * 0.35;
+    if (connections.length === 0) {
+        container.innerHTML = `
+            <div class="network-controls">
+                <label>Similarity threshold: <span id="threshold-value">${threshold.toFixed(2)}</span></label>
+                <input type="range" min="0.1" max="0.7" step="0.05" value="${threshold}" 
+                    onchange="updateNetworkThreshold(this.value)">
+            </div>
+            <div style="text-align: center; padding: 40px; color: #666;">
+                No connections above threshold ${threshold.toFixed(2)}.<br>
+                Try lowering the threshold.
+            </div>
+        `;
+        return;
+    }
 
-    let svg = `<svg width="${width}" height="${height}" style="display: block;">`;
+    const radius = Math.min(width, height) * 0.35;
+    const angleStep = (2 * Math.PI) / connections.length;
+
+    // Build SVG
+    let svg = `<svg width="${width}" height="${height}" style="display: block; background: #fafafa; border-radius: 8px;">`;
     
-    // Draw edges
+    // Draw edges first (so nodes appear on top)
     connections.forEach((conn, i) => {
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius;
-        const strokeWidth = 1 + conn.similarity * 4;
-        const opacity = 0.3 + conn.similarity * 0.5;
+        const strokeWidth = 1 + conn.similarity * 5;
+        const opacity = 0.2 + conn.similarity * 0.6;
         
         svg += `<line x1="${centerX}" y1="${centerY}" x2="${x}" y2="${y}" 
-            stroke="#999" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
+            stroke="#666" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
     });
     
-    // Draw center node (current)
-    svg += `<circle cx="${centerX}" cy="${centerY}" r="20" fill="#E63946" stroke="#333" stroke-width="3"/>`;
-    svg += `<text x="${centerX}" y="${centerY + 35}" text-anchor="middle" font-size="11" fill="#333">${subclusterData.name.substring(0, 20)}</text>`;
+    // Draw center node (current subcluster)
+    svg += `<circle cx="${centerX}" cy="${centerY}" r="22" fill="#E63946" stroke="#fff" stroke-width="3"/>`;
+    
+    // Center node label (below node)
+    const centerLabel = subclusterData.name.substring(0, 22);
+    svg += `<text x="${centerX}" y="${centerY + 38}" text-anchor="middle" 
+        font-size="11" font-weight="bold" fill="#333">${centerLabel}</text>`;
+    svg += `<text x="${centerX}" y="${centerY + 50}" text-anchor="middle" 
+        font-size="9" fill="#666">(current)</text>`;
     
     // Draw connected nodes
     connections.forEach((conn, i) => {
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius;
-        const color = colors.by_name[conn.primary_name] || '#999';
-        const nodeRadius = 8 + conn.similarity * 8;
+        const color = (colors && colors.by_name && colors.by_name[conn.primary_name]) || '#999';
+        const nodeRadius = 10 + conn.similarity * 10;
         
-        svg += `<circle cx="${x}" cy="${y}" r="${nodeRadius}" fill="${color}" stroke="white" stroke-width="2" 
+        // Node circle
+        svg += `<circle cx="${x}" cy="${y}" r="${nodeRadius}" fill="${color}" stroke="#fff" stroke-width="2" 
             style="cursor: pointer;" 
-            onclick="navigateToSubcluster('${conn.id}', '${conn.primary_name}')"/>`;
+            onclick="navigateToSubcluster('${conn.id}', '${conn.primary_name.replace(/'/g, "\\'")}')"/>`;
         
-        // Label
-        const labelY = y + nodeRadius + 12;
-        svg += `<text x="${x}" y="${labelY}" text-anchor="middle" font-size="9" fill="#666">${conn.name.substring(0, 15)}</text>`;
-        svg += `<text x="${x}" y="${labelY + 10}" text-anchor="middle" font-size="8" fill="#999">(${conn.similarity.toFixed(2)})</text>`;
+        // Labels
+        const labelY = y + nodeRadius + 14;
+        const label = conn.name.substring(0, 16);
+        svg += `<text x="${x}" y="${labelY}" text-anchor="middle" font-size="9" fill="#444">${label}</text>`;
+        svg += `<text x="${x}" y="${labelY + 11}" text-anchor="middle" font-size="8" fill="#888">(${conn.similarity.toFixed(2)})</text>`;
     });
     
     svg += '</svg>';
@@ -267,61 +512,170 @@ function renderNetworkGraph(containerId, subclusterData, allCoords, colors, thre
             <label>Similarity threshold: <span id="threshold-value">${threshold.toFixed(2)}</span></label>
             <input type="range" min="0.1" max="0.7" step="0.05" value="${threshold}" 
                 onchange="updateNetworkThreshold(this.value)">
+            <span style="font-size: 0.8em; color: #888; margin-left: 10px;">${connections.length} connections</span>
         </div>
     `;
     
     container.innerHTML = html + svg;
 }
 
-// Update network with new threshold
+/**
+ * Update network graph with new threshold
+ */
 function updateNetworkThreshold(threshold) {
-    document.getElementById('threshold-value').textContent = parseFloat(threshold).toFixed(2);
-    if (window.currentSubclusterData && window.allCoords && window.colorsData) {
-        renderNetworkGraph('network-graph', window.currentSubclusterData, window.allCoords, window.colorsData, parseFloat(threshold));
+    const thresholdDisplay = document.getElementById('threshold-value');
+    if (thresholdDisplay) {
+        thresholdDisplay.textContent = parseFloat(threshold).toFixed(2);
+    }
+    
+    if (window.vizData && window.vizData.subclusterData && window.vizData.coords && window.vizData.colors) {
+        renderNetworkGraph(
+            'network-graph', 
+            window.vizData.subclusterData, 
+            window.vizData.coords, 
+            window.vizData.colors, 
+            parseFloat(threshold)
+        );
     }
 }
 
-// Navigate to subcluster page
+// =============================================================================
+// NAVIGATION
+// =============================================================================
+
+/**
+ * Navigate to a subcluster page
+ */
 function navigateToSubcluster(id, primaryName) {
+    if (!window.vizData || !window.vizData.coords) {
+        console.error('Navigation data not available');
+        return;
+    }
+    
+    // Find the subcluster in coords to get its name
+    const subcluster = window.vizData.coords.find(c => c.id === id);
+    if (!subcluster) {
+        console.error('Subcluster not found:', id);
+        return;
+    }
+    
     const primarySlug = VizUtils.slugify(primaryName);
-    // Extract subcluster name from data if available
-    const subName = window.allCoords?.find(c => c.id === id)?.name || id;
-    const subSlug = VizUtils.slugify(subName);
-    window.location.href = `../../clusters/${primarySlug}/${subSlug}.html`;
+    const subSlug = VizUtils.slugify(subcluster.name);
+    
+    // Construct URL (go up two levels from current page)
+    const url = `../../clusters/${primarySlug}/${subSlug}.html`;
+    window.location.href = url;
 }
 
-// Collapsible sections
+// =============================================================================
+// COLLAPSIBLE SECTIONS
+// =============================================================================
+
+/**
+ * Toggle collapsible section
+ */
 function toggleCollapsible(header) {
     header.classList.toggle('collapsed');
     const content = header.nextElementSibling;
-    content.classList.toggle('collapsed');
+    if (content) {
+        content.classList.toggle('collapsed');
+    }
 }
 
-// Initialize visualizations on page load
+// =============================================================================
+// INITIALIZATION
+// =============================================================================
+
+/**
+ * Global data store for visualizations
+ */
+window.vizData = {
+    similarity: null,
+    coords: null,
+    colors: null,
+    metadata: null,
+    subclusterData: null
+};
+
+/**
+ * Initialize all visualizations when DOM is ready
+ */
 document.addEventListener('DOMContentLoaded', function() {
-    // Load data and render if elements exist
+    console.log('Initializing MacroRoundup visualizations...');
+    
+    // Get subcluster ID from body data attribute
     const subclusterId = document.body.dataset.subclusterId;
-    if (!subclusterId) return;
-
-    // Fetch data files
+    if (!subclusterId) {
+        console.log('No subcluster ID found - not a subcluster page');
+        return;
+    }
+    
+    console.log('Loading data for subcluster:', subclusterId);
+    
+    // Show loading states
+    ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'].forEach(id => {
+        VizUtils.showLoading(id);
+    });
+    
+    // Construct data URLs
+    const baseUrl = '../../data/';
+    
+    // Fetch all required data
     Promise.all([
-        fetch('../../data/similarity_matrix.json').then(r => r.json()),
-        fetch('../../data/coords_2d.json').then(r => r.json()),
-        fetch('../../data/colors.json').then(r => r.json()),
-        fetch('../../data/metadata.json').then(r => r.json()),
-        fetch(`../../data/subclusters/${subclusterId}.json`).then(r => r.json())
-    ]).then(([similarity, coords, colors, metadata, subclusterData]) => {
-        // Store globally for threshold updates
-        window.currentSubclusterData = subclusterData;
-        window.allCoords = coords;
-        window.colorsData = colors;
-
-        // Render visualizations
+        fetch(baseUrl + 'similarity_matrix.json').then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status} loading similarity_matrix.json`);
+            return r.json();
+        }),
+        fetch(baseUrl + 'coords_2d.json').then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status} loading coords_2d.json`);
+            return r.json();
+        }),
+        fetch(baseUrl + 'colors.json').then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status} loading colors.json`);
+            return r.json();
+        }),
+        fetch(baseUrl + 'metadata.json').then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status} loading metadata.json`);
+            return r.json();
+        }),
+        fetch(baseUrl + `subclusters/${subclusterId}.json`).then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status} loading ${subclusterId}.json`);
+            return r.json();
+        })
+    ])
+    .then(([similarity, coords, colors, metadata, subclusterData]) => {
+        console.log('All data loaded successfully');
+        
+        // Store data globally for interactions
+        window.vizData = {
+            similarity: similarity,
+            coords: coords,
+            colors: colors,
+            metadata: metadata,
+            subclusterData: subclusterData
+        };
+        
+        // Render all visualizations
+        console.log('Rendering heatmap...');
         renderHeatmap('heatmap-viz', similarity, subclusterId, colors, metadata);
+        
+        console.log('Rendering spider chart...');
         renderSpiderChart('spider-viz', subclusterData, colors);
+        
+        console.log('Rendering embedding map...');
         renderEmbeddingMap('embedding-map', coords, subclusterId, colors);
+        
+        console.log('Rendering network graph...');
         renderNetworkGraph('network-graph', subclusterData, coords, colors, 0.3);
-    }).catch(err => {
-        console.error('Error loading visualization data:', err);
+        
+        console.log('All visualizations rendered');
+    })
+    .catch(error => {
+        console.error('Error loading visualization data:', error);
+        
+        // Show error in all containers
+        ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'].forEach(id => {
+            VizUtils.showError(id, `Failed to load data: ${error.message}`);
+        });
     });
 });
