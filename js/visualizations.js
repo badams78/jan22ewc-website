@@ -1,5 +1,6 @@
 /**
  * MacroRoundup Taxonomy Visualizations v2
+ * Last updated: 2026-01-22 (force rebuild)
  * 
  * Provides interactive visualizations for subcluster pages:
  * - Similarity Heatmap Row
