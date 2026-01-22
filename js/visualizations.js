@@ -219,18 +219,26 @@ function renderSpiderChart(containerId, subclusterData, colors) {
         return;
     }
 
-    // Create canvas
+    // Create canvas with explicit dimensions
     const canvas = document.createElement('canvas');
-    canvas.width = 500;
-    canvas.height = 500;
+    canvas.width = 450;
+    canvas.height = 450;
     canvas.className = 'spider-chart';
+    canvas.style.width = '450px';
+    canvas.style.height = '450px';
+    canvas.style.display = 'block';
+    canvas.style.backgroundColor = '#fafafa';
     container.innerHTML = '';
     container.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
-    const centerX = 250;
-    const centerY = 250;
-    const radius = 180;
+    if (!ctx) {
+        VizUtils.showError(containerId, 'Could not get canvas context');
+        return;
+    }
+    const centerX = 225;
+    const centerY = 225;
+    const radius = 160;
 
     const primaries = Object.keys(spiderSimilarities);
     const numAxes = primaries.length;
@@ -374,26 +382,29 @@ function renderEmbeddingMap(containerId, coords, currentId, colors) {
     html += '</div>';
     
     // Create points
+    let pointCount = 0;
     coords.forEach(point => {
         const color = (colors && colors.by_name && colors.by_name[point.primary_name]) || '#999';
         const isCurrent = point.id === currentId;
         const className = isCurrent ? 'map-point current' : 'map-point';
         
-        // Add some padding to keep points from edge
-        const x = 5 + point.x * 0.9;
-        const y = 5 + point.y * 0.9;
+        // Ensure coordinates are in valid percentage range (5-95%)
+        const x = Math.max(5, Math.min(95, 5 + point.x * 0.9));
+        const y = Math.max(5, Math.min(95, 5 + point.y * 0.9));
         
-        const safeName = point.name.replace(/'/g, "\\'");
-        const safePrimary = point.primary_name.replace(/'/g, "\\'");
+        const safeName = point.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const safePrimary = point.primary_name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         
         html += `<div class="${className}" 
-            style="left: ${x}%; top: ${y}%; background: ${color};"
+            style="left: ${x}%; top: ${y}%; background-color: ${color};"
             onclick="navigateToSubcluster('${point.id}', '${safePrimary}')"
             onmouseenter="showMapTooltip(event, '${safeName}', '${safePrimary}', ${point.article_count})"
             onmouseleave="VizUtils.hideTooltip()">
         </div>`;
+        pointCount++;
     });
     
+    console.log(`Embedding map: rendered ${pointCount} points`);
     container.innerHTML = html;
 }
 
@@ -431,7 +442,8 @@ function renderNetworkGraph(containerId, subclusterData, coords, colors, thresho
         return;
     }
 
-    const width = container.clientWidth || 700;
+    // Use fixed dimensions for consistent rendering
+    const width = 800;
     const height = 550;
     const centerX = width / 2;
     const centerY = height / 2;
@@ -459,8 +471,8 @@ function renderNetworkGraph(containerId, subclusterData, coords, colors, thresho
     const radius = Math.min(width, height) * 0.35;
     const angleStep = (2 * Math.PI) / connections.length;
 
-    // Build SVG
-    let svg = `<svg width="${width}" height="${height}" style="display: block; background: #fafafa; border-radius: 8px;">`;
+    // Build SVG with viewBox for responsiveness
+    let svg = `<svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" style="display: block; width: 100%; height: auto; min-height: 500px; background: #fafafa; border-radius: 8px;">`;
     
     // Draw edges first (so nodes appear on top)
     connections.forEach((conn, i) => {

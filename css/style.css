@@ -180,11 +180,18 @@ footer { text-align: center; padding: 30px; color: #666; font-size: 0.85rem; }
 .spider-container {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 20px 0;
+    min-height: 450px;
+    background: #fafafa;
+    border-radius: 8px;
 }
 
 .spider-chart {
-    max-width: 400px;
+    width: 450px;
+    height: 450px;
+    max-width: 100%;
+    display: block;
 }
 
 /* 2D Map */
@@ -250,31 +257,39 @@ footer { text-align: center; padding: 30px; color: #666; font-size: 0.85rem; }
 /* Network Graph */
 .network-container {
     width: 100%;
-    height: 600px;
+    min-height: 600px;
     background: #fafafa;
     border-radius: 8px;
     position: relative;
+    display: block;
+}
+
+.network-container svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 550px;
 }
 
 .network-controls {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    position: relative;
     background: white;
-    padding: 10px;
+    padding: 10px 15px;
     border-radius: 4px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    z-index: 10;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 .network-controls label {
     font-size: 0.85rem;
-    display: block;
-    margin-bottom: 5px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .network-controls input[type="range"] {
     width: 150px;
+    vertical-align: middle;
 }
 
 /* Chord Diagram */
@@ -304,12 +319,11 @@ footer { text-align: center; padding: 30px; color: #666; font-size: 0.85rem; }
 }
 
 .collapsible-content {
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    overflow: visible;
 }
 
 .collapsible-content.collapsed {
-    max-height: 0;
+    display: none;
 }
 
 @media (max-width: 768px) {
