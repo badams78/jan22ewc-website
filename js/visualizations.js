@@ -601,7 +601,7 @@ window.vizData = {
  * Initialize all visualizations when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing MacroRoundup visualizations...');
+    console.log('MacroRoundup Visualizations: DOM loaded');
     
     // Get subcluster ID from body data attribute
     const subclusterId = document.body.dataset.subclusterId;
@@ -613,38 +613,55 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Loading data for subcluster:', subclusterId);
     
     // Show loading states
-    ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'].forEach(id => {
-        VizUtils.showLoading(id);
+    const vizContainers = ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'];
+    vizContainers.forEach(id => {
+        const container = document.getElementById(id);
+        if (container) {
+            container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Loading visualization...</div>';
+        } else {
+            console.warn('Container not found:', id);
+        }
     });
     
-    // Construct data URLs
+    // Determine correct base URL based on page location
+    // Pages are at /clusters/primary-slug/subcluster-slug.html
+    // Data is at /data/
     const baseUrl = '../../data/';
     
-    // Fetch all required data
+    console.log('Fetching data from:', baseUrl);
+    
+    // Fetch all required data with detailed error handling
+    const fetchWithLogging = async (url, name) => {
+        console.log(`Fetching ${name} from ${url}...`);
+        try {
+            const response = await fetch(url);
+            console.log(`${name}: HTTP ${response.status} ${response.statusText}`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} for ${name}`);
+            }
+            const data = await response.json();
+            console.log(`${name}: Loaded successfully, type=${typeof data}, keys=${Object.keys(data).slice(0,5).join(',')}`);
+            return data;
+        } catch (err) {
+            console.error(`${name}: Failed to load -`, err);
+            throw new Error(`${name}: ${err.message}`);
+        }
+    };
+    
     Promise.all([
-        fetch(baseUrl + 'similarity_matrix.json').then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status} loading similarity_matrix.json`);
-            return r.json();
-        }),
-        fetch(baseUrl + 'coords_2d.json').then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status} loading coords_2d.json`);
-            return r.json();
-        }),
-        fetch(baseUrl + 'colors.json').then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status} loading colors.json`);
-            return r.json();
-        }),
-        fetch(baseUrl + 'metadata.json').then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status} loading metadata.json`);
-            return r.json();
-        }),
-        fetch(baseUrl + `subclusters/${subclusterId}.json`).then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status} loading ${subclusterId}.json`);
-            return r.json();
-        })
+        fetchWithLogging(baseUrl + 'similarity_matrix.json', 'similarity_matrix'),
+        fetchWithLogging(baseUrl + 'coords_2d.json', 'coords_2d'),
+        fetchWithLogging(baseUrl + 'colors.json', 'colors'),
+        fetchWithLogging(baseUrl + 'metadata.json', 'metadata'),
+        fetchWithLogging(baseUrl + 'subclusters/' + subclusterId + '.json', 'subcluster_data')
     ])
     .then(([similarity, coords, colors, metadata, subclusterData]) => {
         console.log('All data loaded successfully');
+        console.log('- Similarity matrix subclusters:', similarity.subclusters?.length);
+        console.log('- Coords entries:', coords?.length);
+        console.log('- Colors keys:', Object.keys(colors || {}).join(','));
+        console.log('- Metadata primaries:', metadata.primaries?.length);
+        console.log('- Subcluster spider keys:', Object.keys(subclusterData.spider || {}).length);
         
         // Store data globally for interactions
         window.vizData = {
@@ -655,27 +672,61 @@ document.addEventListener('DOMContentLoaded', function() {
             subclusterData: subclusterData
         };
         
-        // Render all visualizations
-        console.log('Rendering heatmap...');
-        renderHeatmap('heatmap-viz', similarity, subclusterId, colors, metadata);
+        // Render all visualizations with try-catch
+        try {
+            console.log('Rendering heatmap...');
+            renderHeatmap('heatmap-viz', similarity, subclusterId, colors, metadata);
+            console.log('Heatmap rendered');
+        } catch (e) {
+            console.error('Heatmap render error:', e);
+            VizUtils.showError('heatmap-viz', 'Render error: ' + e.message);
+        }
         
-        console.log('Rendering spider chart...');
-        renderSpiderChart('spider-viz', subclusterData, colors);
+        try {
+            console.log('Rendering spider chart...');
+            renderSpiderChart('spider-viz', subclusterData, colors);
+            console.log('Spider chart rendered');
+        } catch (e) {
+            console.error('Spider chart render error:', e);
+            VizUtils.showError('spider-viz', 'Render error: ' + e.message);
+        }
         
-        console.log('Rendering embedding map...');
-        renderEmbeddingMap('embedding-map', coords, subclusterId, colors);
+        try {
+            console.log('Rendering embedding map...');
+            renderEmbeddingMap('embedding-map', coords, subclusterId, colors);
+            console.log('Embedding map rendered');
+        } catch (e) {
+            console.error('Embedding map render error:', e);
+            VizUtils.showError('embedding-map', 'Render error: ' + e.message);
+        }
         
-        console.log('Rendering network graph...');
-        renderNetworkGraph('network-graph', subclusterData, coords, colors, 0.3);
+        try {
+            console.log('Rendering network graph...');
+            renderNetworkGraph('network-graph', subclusterData, coords, colors, 0.3);
+            console.log('Network graph rendered');
+        } catch (e) {
+            console.error('Network graph render error:', e);
+            VizUtils.showError('network-graph', 'Render error: ' + e.message);
+        }
         
-        console.log('All visualizations rendered');
+        console.log('All visualization rendering complete');
     })
     .catch(error => {
         console.error('Error loading visualization data:', error);
         
-        // Show error in all containers
-        ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'].forEach(id => {
-            VizUtils.showError(id, `Failed to load data: ${error.message}`);
+        // Show error in all containers with detailed message
+        vizContainers.forEach(id => {
+            const container = document.getElementById(id);
+            if (container) {
+                container.innerHTML = `<div style="color: #c00; padding: 20px; text-align: center; background: #fee; border-radius: 8px;">
+                    <strong>Failed to load visualization data</strong><br>
+                    <span style="font-size: 0.85em;">${error.message}</span><br>
+                    <span style="font-size: 0.75em; color: #888;">Check browser console (F12) for details</span>
+                </div>`;
+            }
         });
     });
 });
+
+// Signal that script loaded
+console.log('MacroRoundup Visualizations script loaded');
