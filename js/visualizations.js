@@ -614,23 +614,31 @@ window.vizData = {
  * Initialize all visualizations when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('MacroRoundup Visualizations: DOM loaded');
+    console.log('MacroRoundup Visualizations: DOM loaded - VERSION 3');
+    
+    // Add visible version indicator for debugging
+    const versionIndicator = document.createElement('div');
+    versionIndicator.style.cssText = 'position: fixed; bottom: 10px; right: 10px; background: #333; color: #0f0; padding: 5px 10px; font-size: 11px; border-radius: 4px; z-index: 9999;';
+    versionIndicator.textContent = 'Viz v3 - Loading...';
+    document.body.appendChild(versionIndicator);
     
     // Get subcluster ID from body data attribute
     const subclusterId = document.body.dataset.subclusterId;
     if (!subclusterId) {
         console.log('No subcluster ID found - not a subcluster page');
+        versionIndicator.textContent = 'Viz v3 - Not a subcluster page';
         return;
     }
     
     console.log('Loading data for subcluster:', subclusterId);
+    versionIndicator.textContent = 'Viz v3 - Loading ' + subclusterId + '...';
     
     // Show loading states
     const vizContainers = ['heatmap-viz', 'spider-viz', 'embedding-map', 'network-graph'];
     vizContainers.forEach(id => {
         const container = document.getElementById(id);
         if (container) {
-            container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Loading visualization...</div>';
+            container.innerHTML = '<div style="padding: 20px; text-align: center; color: #666; background: #f0f0f0; border: 2px dashed #ccc;">Loading ' + id + '...</div>';
         } else {
             console.warn('Container not found:', id);
         }
@@ -723,6 +731,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         console.log('All visualization rendering complete');
+        
+        // Update version indicator
+        const vi = document.querySelector('div[style*="position: fixed"]');
+        if (vi) vi.textContent = 'Viz v3 - Rendered OK';
     })
     .catch(error => {
         console.error('Error loading visualization data:', error);
