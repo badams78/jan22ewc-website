@@ -81,6 +81,7 @@
             <br><strong>Rotate</strong> to view from different angles.
             <br><strong>Scroll</strong> to zoom.
             <br><strong>Hover</strong> for details.
+            <br><strong>Click</strong> to navigate to subcluster.
         </p>
         <a href="index.html" class="back-btn">← Back to Home</a>
     </div>
@@ -165,11 +166,16 @@
             Plotly.newPlot('viz-container', [trace], layout, { responsive: true });
 
             // Enhance interaction
+            // Enhance interaction
             const myPlot = document.getElementById('viz-container');
             myPlot.on('plotly_click', function (data) {
-                // Optional: navigate to the clicked cluster?
-                // We'd need to reconstruct the URL structure. 
-                // For now, let's keep it simple as a viewer.
+                if (data.points.length > 0) {
+                    const pointIndex = data.points[0].pointNumber;
+                    const node = nodes[pointIndex];
+                    if (node && node.url) {
+                        window.location.href = node.url;
+                    }
+                }
             });
         }
     </script>

@@ -8,7 +8,8 @@
       "x": -0.0887850268098368,
       "y": -0.17431322437922864,
       "z": 0.11294409278572354,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/us-china-trade-war/currency-and-trade-balance-dynamics.html"
     },
     {
       "id": "P0_S1",
@@ -18,7 +19,8 @@
       "x": -0.15190598206735353,
       "y": -0.25254243799289516,
       "z": 0.17490419291968787,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/us-china-trade-war/tariff-implementation-and-economic-impact.html"
     },
     {
       "id": "P1_S0",
@@ -28,7 +30,8 @@
       "x": 0.0016220662669599447,
       "y": -0.3135923154193782,
       "z": 0.13663822817491725,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/long-term-bond-yields/treasury-market-dynamics-and-foreign-demand.html"
     },
     {
       "id": "P1_S1",
@@ -38,7 +41,8 @@
       "x": 0.06358486688814137,
       "y": -0.25008361754766845,
       "z": 0.19109663198428786,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/long-term-bond-yields/government-debt-sustainability-and-fiscal-deficits.html"
     },
     {
       "id": "P1_S2",
@@ -48,7 +52,8 @@
       "x": 0.08559241584035526,
       "y": -0.24624731900928584,
       "z": 0.055368919786094234,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/long-term-bond-yields/corporate-credit-and-banking-sector-lending.html"
     },
     {
       "id": "P2_S0",
@@ -58,7 +63,8 @@
       "x": 0.09236451187944923,
       "y": -0.016145847657851316,
       "z": -0.12010535376903056,
-      "color": "#2ca02c"
+      "color": "#2ca02c",
+      "url": "clusters/demographics-immigration-policy/global-fertility-decline-family-structure-changes.html"
     },
     {
       "id": "P2_S1",
@@ -68,7 +74,8 @@
       "x": 0.02835922612735594,
       "y": 0.011723665842490584,
       "z": -0.24054632609939064,
-      "color": "#2ca02c"
+      "color": "#2ca02c",
+      "url": "clusters/demographics-immigration-policy/immigration-flows-labor-market-impact.html"
     },
     {
       "id": "P3_S0",
@@ -78,7 +85,8 @@
       "x": -0.18199291688851052,
       "y": -0.3293771540311267,
       "z": -0.030508633892844212,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/us-energy-production-export-dominance.html"
     },
     {
       "id": "P3_S1",
@@ -88,7 +96,8 @@
       "x": -0.2637913654934371,
       "y": -0.17533511233573817,
       "z": -0.10326442004867199,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/global-power-demand-growth-investment-trends.html"
     },
     {
       "id": "P3_S2",
@@ -98,7 +107,8 @@
       "x": -0.18543056366788138,
       "y": 0.3418751806651923,
       "z": -0.19224637523287622,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/scientific-research-discovery-breakthroughs.html"
     },
     {
       "id": "P3_S3",
@@ -108,7 +118,8 @@
       "x": -0.19808719577073436,
       "y": 0.05279040177980706,
       "z": -0.6001858616053166,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/h5n1-bird-flu-outbreak-public-health-impact.html"
     },
     {
       "id": "P3_S4",
@@ -118,7 +129,8 @@
       "x": -0.15100930856428005,
       "y": -0.2191980910258939,
       "z": -0.45257965738732003,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/ocean-temperature-records-climate-impact.html"
     },
     {
       "id": "P3_S5",
@@ -128,7 +140,8 @@
       "x": -0.4835200320575876,
       "y": 0.10913122288389472,
       "z": -0.2647430652014531,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/spacex-starship-development-commercial-space.html"
     },
     {
       "id": "P3_S6",
@@ -138,7 +151,8 @@
       "x": -0.43090948272530694,
       "y": 0.14145229451837799,
       "z": 0.20630725210101358,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/nuclear-fusion-technology-investment-surge.html"
     },
     {
       "id": "P3_S7",
@@ -148,7 +162,8 @@
       "x": -0.16436534197064434,
       "y": -0.3705801805739818,
       "z": -0.33813146708150993,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/water-resource-management-supply-challenges.html"
     },
     {
       "id": "P3_S8",
@@ -158,7 +173,8 @@
       "x": -0.42672652549605117,
       "y": 0.42084170417634875,
       "z": -0.10972606684834796,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/power-generation-infrastructure/quantum-computing-breakthroughs-commercial-develop.html"
     },
     {
       "id": "P4_S0",
@@ -168,7 +184,8 @@
       "x": 0.17864634394221102,
       "y": 0.0721234800288046,
       "z": 0.11384844715389306,
-      "color": "#9467bd"
+      "color": "#9467bd",
+      "url": "clusters/labor-market-dynamics/wage-growth-and-earnings-trends.html"
     },
     {
       "id": "P4_S1",
@@ -178,7 +195,8 @@
       "x": 0.15686159958797918,
       "y": 0.020204681195858814,
       "z": -0.026081283406985744,
-      "color": "#9467bd"
+      "color": "#9467bd",
+      "url": "clusters/labor-market-dynamics/employment-patterns-and-workforce-participation.html"
     },
     {
       "id": "P4_S2",
@@ -188,7 +206,8 @@
       "x": 0.3066550664021933,
       "y": -0.024597692668825694,
       "z": 0.11236176259693434,
-      "color": "#9467bd"
+      "color": "#9467bd",
+      "url": "clusters/labor-market-dynamics/minimum-wage-and-income-support-policies.html"
     },
     {
       "id": "P5_S0",
@@ -198,7 +217,8 @@
       "x": -0.4176119823795287,
       "y": 0.06324243711908532,
       "z": 0.05420490513367318,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/semiconductor-supply-chain-and-trade-policy.html"
     },
     {
       "id": "P5_S1",
@@ -208,7 +228,8 @@
       "x": -0.2663921817458759,
       "y": -0.11449704255931253,
       "z": 0.2349295088055016,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/defense-spending-and-military-mobilization.html"
     },
     {
       "id": "P5_S2",
@@ -218,7 +239,8 @@
       "x": -0.42279684156190844,
       "y": -0.21653164915600762,
       "z": 0.15763652718367835,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/military-alliance-and-regional-defense-strategy.html"
     },
     {
       "id": "P5_S3",
@@ -228,7 +250,8 @@
       "x": -0.3737604460934647,
       "y": -0.13581989225363314,
       "z": 0.005848391378904894,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/critical-minerals-and-rare-earth-controls.html"
     },
     {
       "id": "P5_S4",
@@ -238,7 +261,8 @@
       "x": -0.492437248803667,
       "y": 0.12079764060245426,
       "z": 0.06594905876176552,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/apple-production-shift-and-supply-diversification.html"
     },
     {
       "id": "P5_S5",
@@ -248,7 +272,8 @@
       "x": -0.4238200487623916,
       "y": -0.1842658049053846,
       "z": -0.011664187595286302,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/ev-trade-wars-and-auto-industry-competition.html"
     },
     {
       "id": "P5_S6",
@@ -258,7 +283,8 @@
       "x": -0.4458546940498108,
       "y": 0.020775658401704134,
       "z": -0.10537031451919185,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/drone-technology-and-aerospace-competition.html"
     },
     {
       "id": "P5_S7",
@@ -268,7 +294,8 @@
       "x": -0.4617399701440014,
       "y": -0.08066083068044953,
       "z": 0.06746899630682666,
-      "color": "#8c564b"
+      "color": "#8c564b",
+      "url": "clusters/defense-technology-competition/naval-shipbuilding-competition-and-maritime-power.html"
     },
     {
       "id": "P6_S0",
@@ -278,7 +305,8 @@
       "x": -0.04395129984253404,
       "y": 0.09096620720370284,
       "z": 0.14191254012866492,
-      "color": "#e377c2"
+      "color": "#e377c2",
+      "url": "clusters/productivity-market-performance/corporate-valuations-market-concentration.html"
     },
     {
       "id": "P6_S1",
@@ -288,7 +316,8 @@
       "x": 0.0033667483826315984,
       "y": 0.10440209591459006,
       "z": 0.06644974590292768,
-      "color": "#e377c2"
+      "color": "#e377c2",
+      "url": "clusters/productivity-market-performance/productivity-growth-innovation-dynamics.html"
     },
     {
       "id": "P7_S0",
@@ -298,7 +327,8 @@
       "x": 0.3151525866852088,
       "y": -0.2401379642590333,
       "z": -0.19638078836119538,
-      "color": "#7f7f7f"
+      "color": "#7f7f7f",
+      "url": "clusters/political-attitudes-demographics/voter-demographics-electoral-shifts.html"
     },
     {
       "id": "P7_S1",
@@ -308,7 +338,8 @@
       "x": 0.2890220442900472,
       "y": -0.042418936834387994,
       "z": -0.1636406195895208,
-      "color": "#7f7f7f"
+      "color": "#7f7f7f",
+      "url": "clusters/political-attitudes-demographics/gender-age-political-preference-gaps.html"
     },
     {
       "id": "P8_S0",
@@ -318,7 +349,8 @@
       "x": -0.0006812967307139944,
       "y": 0.06814788637024186,
       "z": 0.19214436539195776,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/economic-performance-productivity-comparisons.html"
     },
     {
       "id": "P8_S1",
@@ -328,7 +360,8 @@
       "x": -0.08941928033630026,
       "y": -0.11868277225278724,
       "z": 0.012342197916106856,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/global-economic-strategy-climate-policy.html"
     },
     {
       "id": "P8_S2",
@@ -338,7 +371,8 @@
       "x": 0.23097873633558047,
       "y": -0.17470744052819662,
       "z": 0.10068151525008791,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/fiscal-policy-government-spending-analysis.html"
     },
     {
       "id": "P8_S3",
@@ -348,7 +382,8 @@
       "x": -0.03120106280671888,
       "y": 0.0019808588910790394,
       "z": 0.21592648747804302,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/industrial-policy-market-efficiency-debates.html"
     },
     {
       "id": "P8_S4",
@@ -358,7 +393,8 @@
       "x": 0.009935634569050923,
       "y": -0.28090229458745386,
       "z": 0.42381607355823797,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/french-government-crisis-fiscal-instability.html"
     },
     {
       "id": "P8_S5",
@@ -368,7 +404,8 @@
       "x": 0.1318885409637992,
       "y": 0.032818727657270425,
       "z": 0.21701632908061702,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/healthcare-economics-income-distribution-analysis.html"
     },
     {
       "id": "P8_S6",
@@ -378,7 +415,8 @@
       "x": 0.10181107984864284,
       "y": -0.3277387446747725,
       "z": 0.2198986247230674,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/budget-reconciliation-legislative-scoring-analysis.html"
     },
     {
       "id": "P8_S7",
@@ -388,7 +426,8 @@
       "x": -0.16555921067584364,
       "y": -0.011232456606694755,
       "z": 0.35609283421011356,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/german-economic-decline-industrial-stagnation.html"
     },
     {
       "id": "P8_S8",
@@ -398,7 +437,8 @@
       "x": 0.018852436655746884,
       "y": -0.04783028989643709,
       "z": 0.373847725100297,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/infrastructure-costs-construction-efficiency-analy.html"
     },
     {
       "id": "P8_S9",
@@ -408,7 +448,8 @@
       "x": 0.1922692182822797,
       "y": 0.16942989005664666,
       "z": 0.3937427873832579,
-      "color": "#bcbd22"
+      "color": "#bcbd22",
+      "url": "clusters/economic-policy-trade/nordic-economic-models-socialist-analysis.html"
     },
     {
       "id": "P9_S0",
@@ -418,7 +459,8 @@
       "x": 0.11182527852080319,
       "y": -0.14448257386391683,
       "z": 0.07547122609662518,
-      "color": "#17becf"
+      "color": "#17becf",
+      "url": "clusters/fed-policy-economic-sentiment/income-growth-vs-inflation-reality.html"
     },
     {
       "id": "P9_S1",
@@ -428,7 +470,8 @@
       "x": 0.07131944492274121,
       "y": -0.16371691056062898,
       "z": 0.129340225235144,
-      "color": "#17becf"
+      "color": "#17becf",
+      "url": "clusters/fed-policy-economic-sentiment/fed-rate-cuts-inflation-risk-concerns.html"
     },
     {
       "id": "P10_S0",
@@ -438,7 +481,8 @@
       "x": 0.23703550585770491,
       "y": 0.18788459527312854,
       "z": -0.20410055133967686,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/academic-performance-learning-assessments.html"
     },
     {
       "id": "P10_S1",
@@ -448,7 +492,8 @@
       "x": 0.05279869034673367,
       "y": 0.25613790481646925,
       "z": 0.10490123012798204,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/management-performance-analysis.html"
     },
     {
       "id": "P10_S2",
@@ -458,7 +503,8 @@
       "x": 0.42322218710965703,
       "y": -0.07474317025069553,
       "z": -0.04022196816033087,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/generational-wealth-income-disparities.html"
     },
     {
       "id": "P10_S3",
@@ -468,7 +514,8 @@
       "x": 0.17196554796127628,
       "y": 0.1387729199133098,
       "z": -0.029362013792763448,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/labor-market-outcomes-by-education-level.html"
     },
     {
       "id": "P10_S4",
@@ -478,7 +525,8 @@
       "x": 0.266994376201488,
       "y": 0.11561656320456346,
       "z": -0.0639767584533418,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/college-graduate-employment-wage-premiums.html"
     },
     {
       "id": "P10_S5",
@@ -488,7 +536,8 @@
       "x": 0.3203533143821503,
       "y": 0.23338306022006056,
       "z": 0.06753665325932622,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/intergenerational-income-mobility-economic-prospec.html"
     },
     {
       "id": "P10_S6",
@@ -498,7 +547,8 @@
       "x": 0.3677655800673228,
       "y": 0.144327268774161,
       "z": -0.02834979328875163,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/racial-ethnic-educational-attainment-gaps.html"
     },
     {
       "id": "P10_S7",
@@ -508,7 +558,8 @@
       "x": 0.17735319574863959,
       "y": 0.2417238369812082,
       "z": -0.2543595109644616,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/race-based-college-admissions-policy-debates.html"
     },
     {
       "id": "P10_S8",
@@ -518,7 +569,8 @@
       "x": 0.17948012813460135,
       "y": 0.36836244365162746,
       "z": 0.008653032158730237,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/cognitive-skills-intelligence-in-economic-returns.html"
     },
     {
       "id": "P10_S9",
@@ -528,7 +580,8 @@
       "x": 0.292626115880395,
       "y": 0.22913136215093843,
       "z": 3.9806875408670946e-05,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/gender-gaps-in-education-marriage-outcomes.html"
     },
     {
       "id": "P10_S10",
@@ -538,7 +591,8 @@
       "x": 0.26604796248134743,
       "y": 0.3301318188669315,
       "z": -0.09442104951265887,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/early-childhood-k-12-educational-interventions.html"
     },
     {
       "id": "P10_S11",
@@ -548,7 +602,8 @@
       "x": 0.05797246424700315,
       "y": 0.3692426388482053,
       "z": -0.15773716615703107,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/research-quality-scientific-reproducibility-crisis.html"
     },
     {
       "id": "P10_S12",
@@ -558,7 +613,8 @@
       "x": 0.2898666289806546,
       "y": 0.10117539449211867,
       "z": 0.10442730379977995,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/income-trends-lifetime-earnings-patterns.html"
     },
     {
       "id": "P10_S13",
@@ -568,7 +624,8 @@
       "x": 0.3029705515514031,
       "y": 0.332835911665503,
       "z": -0.16687857817569418,
-      "color": "#1f77b4"
+      "color": "#1f77b4",
+      "url": "clusters/education-employment-outcomes/elite-college-admissions-standardized-testing.html"
     },
     {
       "id": "P11_S0",
@@ -578,7 +635,8 @@
       "x": -0.22114723386298304,
       "y": 0.14786486317937245,
       "z": 0.08898108418836703,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/ai-investment-market-risks/ai-capital-expenditure-and-investment-surge.html"
     },
     {
       "id": "P11_S1",
@@ -588,7 +646,8 @@
       "x": -0.21110637795677273,
       "y": 0.37219591964916326,
       "z": 0.02557286652826408,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/ai-investment-market-risks/ai-performance-plateaus-and-diminishing-returns.html"
     },
     {
       "id": "P11_S2",
@@ -598,7 +657,8 @@
       "x": -0.061704685574797136,
       "y": 0.3025940112462684,
       "z": 0.07791945831970054,
-      "color": "#ff7f0e"
+      "color": "#ff7f0e",
+      "url": "clusters/ai-investment-market-risks/ai-driven-labor-market-displacement-effects.html"
     },
     {
       "id": "P12_S0",
@@ -608,7 +668,8 @@
       "x": 0.27004863659827866,
       "y": 0.020274588229564922,
       "z": 0.1128517105323048,
-      "color": "#2ca02c"
+      "color": "#2ca02c",
+      "url": "clusters/wealth-distribution-inequality/top-percentile-wealth-concentration-trends.html"
     },
     {
       "id": "P12_S1",
@@ -618,7 +679,8 @@
       "x": 0.22173131662233664,
       "y": -0.04950835870691783,
       "z": 0.2511112108220828,
-      "color": "#2ca02c"
+      "color": "#2ca02c",
+      "url": "clusters/wealth-distribution-inequality/tax-policy-and-high-earner-contributions.html"
     },
     {
       "id": "P13_S0",
@@ -628,7 +690,8 @@
       "x": 0.14716931329945496,
       "y": -0.18686105720205293,
       "z": -0.05966076038810839,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/housing-affordability-market-pricing-trends.html"
     },
     {
       "id": "P13_S1",
@@ -638,7 +701,8 @@
       "x": 0.18626492513415008,
       "y": -0.048875256597446334,
       "z": -0.0864984577715228,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/metropolitan-population-shifts-economic-dynamics.html"
     },
     {
       "id": "P13_S2",
@@ -648,7 +712,8 @@
       "x": 0.0676091732386147,
       "y": -0.44708168150705474,
       "z": -0.16539547754149048,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/property-insurance-crisis-climate-risk.html"
     },
     {
       "id": "P13_S3",
@@ -658,7 +723,8 @@
       "x": 0.09833790697500856,
       "y": -0.048924671056434776,
       "z": -0.22325140238757152,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/youth-health-social-behavior-decline.html"
     },
     {
       "id": "P13_S4",
@@ -668,7 +734,8 @@
       "x": 0.23073824972549503,
       "y": -0.005348999055032833,
       "z": -0.3797607616645191,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/urban-crime-rates-public-safety-trends.html"
     },
     {
       "id": "P13_S5",
@@ -678,7 +745,8 @@
       "x": 0.1601211592378096,
       "y": -0.20190513723884315,
       "z": -0.3665899703563737,
-      "color": "#d62728"
+      "color": "#d62728",
+      "url": "clusters/urban-migration-housing/drug-overdose-epidemic-mortality-trends.html"
     },
     {
       "id": "P14_S0",
@@ -688,7 +756,8 @@
       "x": -0.13529559873023778,
       "y": -0.044491884950548184,
       "z": 0.04772165161104293,
-      "color": "#9467bd"
+      "color": "#9467bd",
+      "url": "clusters/china-trade-economic-impact/china-trade-surplus-export-growth.html"
     },
     {
       "id": "P14_S1",
@@ -698,7 +767,8 @@
       "x": -0.18757757460352897,
       "y": 0.029019678355852584,
       "z": -0.22216696015780202,
-      "color": "#9467bd"
+      "color": "#9467bd",
+      "url": "clusters/china-trade-economic-impact/china-domestic-politics-social-issues.html"
     }
   ]
 }
